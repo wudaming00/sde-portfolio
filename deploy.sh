@@ -1,27 +1,24 @@
-cat > deploy.sh << 'EOF'
 #!/bin/bash
 
-# AWS S3 Deployment Script
-# Replace YOUR_BUCKET_NAME with your actual S3 bucket name
+BUCKET_NAME="damingwu-portfolio-2026"
+REGION="us-east-1"
 
-BUCKET_NAME="your-bucket-name"
+echo "🚀 Starting deployment to $BUCKET_NAME..."
 
-echo "Starting deployment..."
-
-# Sync files to S3
+# 上传文件到S3
+echo "📦 Uploading files to S3..."
 aws s3 sync . s3://$BUCKET_NAME \
   --exclude ".git/*" \
   --exclude ".gitignore" \
   --exclude "deploy.sh" \
   --exclude "README.md" \
-  --delete
+  --exclude "bucket-policy.json" \
+  --exclude ".DS_Store" \
+  --delete \
+  --cache-control "max-age=3600"
 
-# Invalidate CloudFront cache (optional)
-# DISTRIBUTION_ID="your-distribution-id"
-# aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
-
-echo "Deployment complete!"
-EOF
-
-# 给脚本执行权限
-chmod +x deploy.sh
+echo "✅ Deployment complete!"
+echo ""
+echo "🌐 Your website is live at:"
+echo "   http://$BUCKET_NAME.s3-website-$REGION.amazonaws.com"
+echo ""

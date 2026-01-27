@@ -1,4 +1,3 @@
-cat > README.md << 'EOF'
 # Personal Portfolio Website
 
 A modern, professional personal homepage for a Software Development Engineer.
